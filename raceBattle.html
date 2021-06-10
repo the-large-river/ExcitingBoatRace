@@ -1,0 +1,602 @@
+		<!DOCTYPE html>
+		<html onclick="playSong()">
+			<head>
+
+			<title>raceBattle</title>
+
+		<style>
+			
+			body{
+
+				background-color: black;
+			}
+
+
+
+
+
+			#scene {
+
+				position: relative;
+				background-image: url("battleStage.png") no-repeat;
+				width: 1000px;
+				height: 563px;
+				display: table;
+				margin: 0 auto;
+				overflow: hidden;
+			}
+
+			#player {
+
+				position: absolute;
+				left: 20px;
+				top: 120px
+			}
+
+			#player2, #player3 {
+
+				position: absolute;
+				left: 600px;
+				top: 120px;
+				z-index: 1;
+			}
+
+			#playerDead {
+
+				position: absolute;
+				left: -50px;
+				top: 220px;
+			}
+
+			#opponent {
+
+				position: absolute;
+				left: 600px;
+				top: -40px;
+
+
+			}
+
+
+			#opponent2, #opponent3 {
+
+				position: absolute;
+				left: 100px;
+				top: -40px;
+			}
+
+			#opponentDead{
+				position: absolute;
+				left: 500px;
+				top: 80px;
+			}
+
+			#opponentHP{
+
+				position: absolute;
+				left: 810px;
+				top: 40px;
+				color: white;
+				font-size: 30px;
+				font-family: sans-serif;
+			}
+
+			#playerWins{
+
+				position: absolute;
+				left: 20px;
+				top: 20px;
+			}
+
+			#playerHP{
+
+				position: absolute;
+				left: 115px;
+				top: 100px;
+				color: white;
+				font-size: 30px;
+				font-family: sans-serif;
+			}
+
+			#menu {
+
+				position: absolute;
+				left: 120px;
+				top: 420px;
+				width: 700px;
+				height: 130px;
+				background-color: rgba(0,0,100,7);
+				color: white;
+				border: 2px solid white;
+				border-radius: 10px 10px 10px 10px;
+				font-size: 22px;
+				padding-left: 40px;
+				font-family: sans-serif;
+				
+			}
+
+			#message{
+
+				position: absolute;
+				left: 400px;
+				top: 150px;
+				width: 200px;
+				height: 60px;
+				background-color: rgba(0,0,100,7);
+				color: white;
+				border: 2px solid white;
+				border-radius: 10px 10px 10px 10px;
+				font-size: 22px;
+				padding-left: 3px;
+				font-family: sans-serif;
+				text-align: center;
+				padding-top: 30px;
+			}
+
+
+			p, ul, li{
+
+				margin-top: 10px;
+				margin-bottom: 10px;
+			}
+
+			li{
+				list-style: none;
+			}
+
+			li:hover{
+				text-decoration: underline;
+				cursor: pointer;
+			}
+
+
+		</style>
+	</head>
+	<body>
+
+		<div id="scene">
+
+			<div id="You">???/???</div>
+			<div id="Opponent">???/???</div>
+			
+			
+
+		
+
+			<div id="menu">
+				
+				<p>What will you do?</p>
+
+				<ul>
+					<li onclick="fight()">Fight</li>
+					<li onclick="run()">Run</li>
+
+				</ul>
+
+			</div>
+
+		</div>
+
+		<script>
+
+			var fighting = false;
+
+			var playerHPMAX = 50;
+			var playerHP = playerHPMAX;
+			var playerHPDiv = document.getElementById('playerHP');
+
+
+
+
+
+			var opponentHPMAX = 100;
+			var opponentHP = opponentHPMAX;
+			var opponentHPDiv = document.getElementById('opponentHP');
+
+			
+
+			
+
+
+			var playerImg = document.getElementById('player');
+			var player2Img = document.getElementById('player2');
+			var player3Img = document.getElementById('player3');
+			var playerDeadImg = document.getElementById('playerDead');
+			var playerWinsImg = document.getElementById('playerWins');
+			player2Img.style.display = 'none';
+			player3Img.style.display = 'none';
+			playerDeadImg.style.display = 'none';
+			playerWinsImg.style.display = 'none';
+
+			var opponentImg = document.getElementById('opponent');
+			var opponent2Img = document.getElementById('opponent2');
+			var opponent3Img = document.getElementById('opponent3');
+			var opponentDeadImg = document.getElementById('opponentDead');
+
+			opponent2Img.style.display = 'none';
+			opponent3Img.style.display = 'none';
+			opponentDeadImg.style.display = 'none';
+
+			var messageDiv = document.getElementById('message');
+			var menuDiv = document.getElementById('menu')
+
+			messageDiv.style.display = 'none';
+
+
+			var song = new Audio('BoxCat_Games_-_05_-_Battle_Boss.mp3');
+
+			song.volume = .3;
+
+			var playerAttackSound = new Audio('playerAttack.mp3');
+			var opponentAttackSound = new Audio('opponentAttack.mp3');
+			var runSound = new Audio('run.mp3');
+			var victorySong = new Audio('254644__klankbeeld__intro-brass-01.mp3');
+
+			var songStarted = false;
+
+			function playSong(){
+
+				if (songStarted == true) {
+
+					return;
+				}
+
+				song.play();
+				songStarted = true;
+
+
+			}
+
+			function hideMenu(){
+
+				menuDiv.style.display = 'none';
+			}
+
+			function showMenu(){
+
+				if (playerHP ==0 || opponentHP == 0) {
+
+					return;
+				}
+
+				menuDiv.style.display = '';
+			}
+
+			function hideMessage(){
+
+				messageDiv.style.display = '';
+			}
+
+			function updateplayerHP(){
+
+				playerHPDiv.innerHTML = playerHP+'/'+playerHPMAX;	
+			}
+
+			function updateopponentHP(){
+
+				opponentHPDiv.innerHTML = opponentHP+'/'+opponentHPMAX;	
+			}
+
+			function showplayer2(){
+
+				playerImg.style.display = 'none';
+
+				player2Img.style.display = '';
+			}
+
+
+			function showplayer3(){
+
+				player2Img.style.display = 'none';
+
+				player3Img.style.display = '';
+			}
+
+
+
+
+			function showplayer(){
+
+				player3Img.style.display = 'none';
+
+				playerImg.style.display = '';
+			}
+
+			function showplayerDead(){
+
+				playerImg.style.display = 'none';
+				playerDeadImg.style.display = '';
+			}
+
+			function goToLostPage(){
+
+				window.location.href = 'lost.html';
+			}
+
+			function playerloses(){
+
+				
+
+				messageDiv.innerHTML = 'You lose';
+
+				messageDiv.style.display = '';
+
+				setTimeout(goToLostPage, 2000);
+			}
+
+
+			function fight(){
+
+				fighting = true;
+
+				playerImg.style.left = '520px'
+
+				hideMenu();
+
+				Attack();
+
+				setTimeout(opponentAttack, 1000);
+
+				setTimeout(showMenu, 2000);
+
+				setTimeout(stopFighting, 2000);
+
+
+			}
+
+			function stopFighting(){
+
+				fighting = false;
+			}
+			
+
+			updateplayerHP();
+			updateopponentHP();
+
+			//setTimeout(opponentAttackFirst, 2000);
+
+			
+
+			function goToWonPage(){
+
+				window.location.href = 'won.html';
+			}
+
+			function playerWins(){
+
+				playerImg.style.display = 'none';
+
+				playerWinsImg.style.display = '';
+
+				messageDiv.innerHTML = 'You win!';
+
+				messageDiv.style.display = '';
+
+				song.pause();
+
+				victorySong.play();
+
+				setTimeout(goToWonPage, 10000);
+			}
+
+			function playerReturn(){
+
+				playerImg.style.left = '20px';
+				playerImg.style.opacity = 1;
+			}
+
+			function opponentReturn(){
+
+				opponentImg.style.left = '600px';
+
+				opponentImg.style.opacity = 1;
+			}
+
+			function opponentGo(){
+
+				var damage = 10 + Math.round(10 * Math.random());
+
+				if (Math.random() > .8 || playerHP < 20) {
+
+					damage = damage * 2;
+				}
+
+				opponentHP = opponentHP - damage;
+
+				if (opponentHP < 0) {
+
+					opponentHP = 0;
+				}
+
+				updateopponentHP();
+
+				opponentImg.style.left = '630px';
+
+				opponentImg.style.opacity = .5;
+
+				if (opponentHP > 0) {
+
+					setTimeout(opponentReturn, 200)
+				}
+				else{
+					showopponentDead();
+					setTimeout(playerWins, 700);
+				}
+
+
+
+				setTimeout(opponentReturn, 200);
+
+			}
+
+			function playplayerAttackSound(){
+
+				playerAttackSound.play();
+			}
+
+
+			function playerAttack(){
+
+				playerImg.style.left = '520px';
+				setTimeout(showplayer2, 150);
+				setTimeout(playplayerAttackSound, 200);
+				setTimeout(showplayer3, 250);
+				setTimeout(opponentGo, 300);
+				setTimeout(showplayer, 350);
+				setTimeout(playerReturn, 450);
+			}
+
+			function playopponentAttackSound(){
+
+				opponentAttackSound.play();
+			}
+
+
+			function opponentAttack(){
+
+				if (opponentHP = 0) {
+
+					return;
+				}
+
+				opponentImg.style.left = '100px';
+				setTimeout(showopponent2, 200);
+				setTimeout(playopponentAttackSound, 300);
+				setTimeout(showopponent3, 500);
+				setTimeout(playerGo, 600);
+				setTimeout(showopponent, 800);
+				setTimeout(opponentReturn, 1000);
+			}
+
+			function opponentAttackFirst(){
+
+				if (fighting == true) {
+
+					setTimeout(opponentAttackFirst, 2000);
+
+					return;
+				}
+
+				if (Math.random() > .8) {
+
+					hideMenu();
+
+					opponentAttack();
+
+					setTimeout(showMenu, 1500);
+				}
+				
+				setTimeout(opponentAttackFirst, 2000);
+			}
+
+			function goToRanPage(){
+
+				window.location.href = 'ran.html';
+			}
+
+
+			function run(){
+
+				fighting = true;
+
+				if (Math.random() > .5) {
+
+					playerImg.style.display = 'none';
+
+					runSound.play();
+
+					setTimeout(goToRanPage, 1000);
+				}
+
+				else{
+
+					hideMenu();
+
+					messageDiv.innerHTML = 'Couldn\'t run!';
+
+					messageDiv.style.display = '';
+
+					setTimeout(opponentAttack, 1000);
+
+					setTimeout(hidemessage, 2000);
+
+					setTimeout(showMenu, 2000);
+
+					setTimeout(stopFighting, 2000);
+				}
+
+				playerImg.style.display = 'none';
+
+				runSound.play();
+
+				setTimeout(goToRanPage, 1000);
+			}
+
+
+			function showopponent2(){
+
+				opponentImg.style.display = 'none';
+				opponent2Img.style.display = '';
+			}
+
+			function showopponent3(){
+
+				opponent2Img.style.display = 'none';
+				opponent3Img.style.display = '';
+			}
+
+			function showopponent(){
+
+				opponent3Img.style.display = 'none';
+				opponentImg.style.display = '';
+			}
+
+			function showopponentDead(){
+
+				opponentImg.style.display = 'none';
+				opponentDeadImg.style.display = '';
+			}
+
+			function playerGo(){
+
+				var damage = Math.round(30 * Math.random());
+
+				if (Math.random() < .3) {
+
+					damage = 0;
+				}
+
+				playerHP = playerHP - damage;
+				if (playerHP < 0) {
+
+					playerHP = 0;
+				}
+				updateplayerHP();
+				playerImg.style.left = '0px';
+				playerImg.style.opacity = .5;
+				
+				if(playerHP = 0){
+
+					setTimeout(playerReturn, 200)
+				}
+
+				else{
+
+					showplayerDead();
+					setTimeout(playerloses, 700);
+				}
+
+
+				setTimeout(playerReturn, 200);
+			}
+
+			
+
+		</script>
+
+
+
+
+
+	</body>
+</html>

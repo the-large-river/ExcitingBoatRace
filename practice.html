@@ -1,0 +1,131 @@
+		<!DOCTYPE html>
+		<html onclick="playSong()">
+			<head>
+
+			<title>raceBattle</title>
+
+		<style>
+			
+			body{
+
+				background-color: black;
+			}
+
+
+
+
+
+			#scene {
+
+				position: relative;
+				background: url('battleStage.png');
+				width: 1000px;
+				height: 563px;
+				display: table;
+				margin: 0 auto;
+			
+			}
+
+			#player {
+
+				position: absolute;
+				width: 10px;
+				left: 800px;
+				top: 120px;
+			}
+
+
+			#opponent {
+
+				position: relative;
+				left: 400px;
+				top: 400px;
+
+
+			}
+
+
+
+			
+
+			#playerWins{
+
+				position: absolute;
+				left: 20px;
+				top: 20px;
+			}
+
+			
+
+			#menu {
+
+				position: absolute;
+				left: 180px;
+				top: 420px;
+				width: 100px;
+				height: 50px;
+				background-color: rgba(0,0,100,7);
+				color: white;
+				border: 2px solid white;
+				border-radius: 10px 10px 10px 10px;
+				font-size: 22px;
+				padding-left: 10px;
+				font-family: sans-serif;
+				text-align: center;
+				margin: auto;
+			}
+
+			
+
+
+			p, ul, li{
+
+				margin-top: 10px;
+				margin-bottom: 10px;
+			}
+
+			li{
+				list-style: none;
+			}
+
+			li:hover{
+				text-decoration: underline;
+				cursor: pointer;
+			}
+
+
+		</style>
+	</head>
+	<body>
+
+		<div id="scene">
+
+			<img src="player.png">
+			<img src="opponent.png">
+
+		
+
+			<div id="menu">
+				
+				
+				<ul>
+					<p onclick="go()">Go</p>
+
+				</ul>
+
+			</div>
+
+		</div>
+
+		<script>
+
+
+
+		</script>
+
+
+
+
+
+	</body>
+</html>
